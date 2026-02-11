@@ -132,8 +132,13 @@ resource "aws_key_pair" "app_key" { # Creates an SSH key pair so we can connect 
   public_key = file("~/.ssh/learn-terraform.pub")
 }
 
+resource "aws_eip" "app_eip" {
+  instance = aws_instance.app_server.id
+  domain   = "vpc"
+}
+
 output "public_ip" {
-  value = aws_instance.app_server.public_ip
+  value = aws_eip.app_eip.public_ip
 
   description = "Public IP of the EC2 instance"
 }
